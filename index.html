@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bullet Journal · DeepSeek Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: rgba(255,255,255,0.85);
+            --glass: rgba(255,255,255,0.6);
+            --text: #0f172a;
+            --text-secondary: #64748b;
+            --accent: #6366f1;
+            --accent-glow: rgba(99,102,241,0.3);
+            --cyan: #06b6d4;
+            --cyan-glow: rgba(6,182,212,0.3);
+            --deepseek-blue: #3b82f6;
+            --deepseek-dark: #1e40af;
+            --border: rgba(148,163,184,0.2);
+            --shadow: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --danger: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --tag-work: #3b82f6;
+            --tag-personal: #8b5cf6;
+            --tag-health: #10b981;
+            --tag-urgent: #ef4444;
+            --tag-other: #f59e0b;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+        }
+        body.dark {
+            --bg: #0b1120;
+            --card: rgba(15,23,42,0.85);
+            --glass: rgba(15,23,42,0.5);
+            --text: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --border: rgba(71,85,105,0.3);
+            --shadow: 0 1px 3px rgba(0,0,0,0.4);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.6);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Space Grotesk', system-ui, sans-serif;
+            background: var(--bg);
+            background-image: radial-gradient(ellipse at 20% 20%, rgba(99,102,241,0.06) 0%, transparent 50%),
+                              radial-gradient(ellipse at 80% 80%, rgba(6,182,212,0.04) 0%, transparent 50%);
+            color: var(--text);
+            padding: 1.25rem;
+            max-width: 920px;
+            margin: 0 auto;
+            transition: all var(--transition);
+            padding-bottom: 90px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+        .header-left { display: flex; align-items: center; gap: 0.75rem; }
+        .whale-logo {
+            width: 44px; height: 44px; position: relative;
+            display: flex; align-items: center; justify-content: center;
+            animation: whale-swim 3s ease-in-out infinite;
+        }
+        @keyframes whale-swim { 0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)} }
+        .whale-body {
+            width: 32px; height: 20px;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            box-shadow: 0 0 15px rgba(59,130,246,0.4);
+        }
+        .whale-body::before {
+            content: ''; position: absolute; top: -3px; right: 4px;
+            width: 6px; height: 6px; background: white;
+            border-radius: 50%; box-shadow: 0 0 4px rgba(255,255,255,0.8);
+        }
+        .whale-body::after {
+            content: ''; position: absolute; bottom: -2px; left: 2px;
+            width: 0; height: 0;
+            border-left: 5px solid transparent; border-right: 5px solid transparent;
+            border-bottom: 8px solid #3b82f6; transform: rotate(-30deg);
+        }
+        .whale-tail {
+            position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+            width: 0; height: 0;
+            border-top: 7px solid transparent; border-bottom: 7px solid transparent;
+            border-left: 10px solid #6366f1;
+        }
+        .whale-dot {
+            position: absolute; bottom: -2px; right: -2px;
+            width: 10px; height: 10px; background: var(--cyan);
+            border-radius: 50%; box-shadow: 0 0 10px var(--cyan-glow);
+        }
+        .header-title { display: flex; flex-direction: column; }
+        .header-title h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
+        .header-title .powered-by {
+            font-size: 0.65rem; color: var(--text-secondary);
+            letter-spacing: 0.05em; font-weight: 500;
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+        .powered-by .ds-dot { width: 5px; height: 5px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 6px var(--cyan-glow); }
+        .header-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        button, .btn {
+            padding: 0.5rem 0.9rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all var(--transition);
+            font-family: inherit;
+            letter-spacing: -0.01em;
+        }
+        button:hover, .btn:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+            box-shadow: 0 0 20px var(--accent-glow);
+            transform: translateY(-1px);
+        }
+        button:active { transform: scale(0.97); }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            color: white; border: none; font-weight: 600;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+        .btn-primary:hover { box-shadow: 0 0 25px var(--accent-glow); }
+        .btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .btn-icon {
+            width: 36px; height: 36px; padding: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: var(--radius-sm); font-size: 1rem;
+        }
+        .btn-help { background: transparent; border: 2px solid var(--cyan); color: var(--cyan); font-weight: 700; font-size: 1rem; animation: pulse-help 2s infinite; }
+        .btn-help:hover { background: var(--cyan); color: white; box-shadow: 0 0 20px var(--cyan-glow); }
+        @keyframes pulse-help { 0%,100%{box-shadow:0 0 0 0 var(--cyan-glow)}50%{box-shadow:0 0 0 8px rgba(6,182,212,0)} }
+        nav {
+            display: flex; gap: 0.3rem; margin-bottom: 1.5rem;
+            background: var(--card); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 0.4rem; border-radius: var(--radius);
+            box-shadow: var(--shadow); border: 1px solid var(--border);
+        }
+        nav button {
+            flex: 1; min-width: fit-content; justify-content: center;
+            border: none; background: transparent; box-shadow: none;
+            border-radius: var(--radius-sm); padding: 0.55rem 0.7rem;
+            font-weight: 500; color: var(--text-secondary); transition: all var(--transition);
+        }
+        nav button:hover { background: rgba(99,102,241,0.1); color: var(--accent); transform: none; box-shadow: none; }
+        nav button.active { background: var(--accent); color: white; font-weight: 600; }
+        .view { display: none; animation: fadeInUp 0.3s ease; }
+        .view.active { display: block; }
+        @keyframes fadeInUp { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+        .card {
+            background: var(--card); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 1.4rem; border-radius: var(--radius);
+            box-shadow: var(--shadow); margin-bottom: 0.9rem;
+            border: 1px solid var(--border); transition: all var(--transition);
+        }
+        .card:hover { box-shadow: var(--shadow-md); }
+        label {
+            font-size: 0.75rem; font-weight: 600; color: var(--text-secondary);
+            text-transform: uppercase; letter-spacing: 0.08em; display: block; margin-bottom: 0.2rem;
+        }
+        textarea, input[type="text"], input[type="date"], input[type="search"], input[type="datetime-local"], input[type="time"], input[type="number"], input[type="month"] {
+            width: 100%; padding: 0.65rem 0.8rem;
+            border: 1px solid var(--border); border-radius: var(--radius-sm);
+            font-size: 0.9rem; background: var(--glass); color: var(--text);
+            margin-bottom: 0.6rem; font-family: inherit; transition: all var(--transition);
+        }
+        textarea:focus, input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+        textarea { min-height: 65px; resize: vertical; }
+        .entry-row {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border);
+            transition: all var(--transition); border-radius: var(--radius-sm); margin-bottom: 0.1rem;
+        }
+        .entry-row:last-child { border-bottom: none; }
+        .entry-row:hover { background: rgba(99,102,241,0.04); transform: translateX(2px); }
+        .entry-row.overdue { background: rgba(239,68,68,0.08); border-left: 2px solid var(--danger); }
+        .entry-row.due-today { background: rgba(245,158,11,0.08); border-left: 2px solid var(--warning); }
+        .entry-row.paid { opacity: 0.5; }
+        .entry-text { flex: 1; word-break: break-word; font-size: 0.9rem; }
+        .entry-text.done { text-decoration: line-through; opacity: 0.5; }
+        .bullet-icon {
+            width: 30px; height: 30px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; flex-shrink: 0; font-weight: bold; font-size: 0.8rem;
+            border: 2px solid var(--accent); color: var(--accent); transition: all var(--transition);
+        }
+        .bullet-icon:hover { transform: scale(1.1); box-shadow: 0 0 12px var(--accent-glow); }
+        .bullet-icon.done { background: var(--success); color: white; border-color: var(--success); }
+        .bullet-icon.priority { border-color: var(--danger); color: var(--danger); }
+        .bullet-icon.event { border-color: var(--cyan); color: var(--cyan); }
+        .delete-btn {
+            background: none; border: none; color: var(--text-secondary);
+            cursor: pointer; font-size: 1rem; padding: 0.2rem 0.4rem;
+            border-radius: 4px; transition: all var(--transition); opacity: 0.4;
+        }
+        .delete-btn:hover { color: var(--danger); opacity: 1; background: rgba(239,68,68,0.1); }
+        .tag {
+            font-size: 0.65rem; padding: 0.15rem 0.5rem; border-radius: 12px;
+            font-weight: 600; white-space: nowrap;
+        }
+        .tag-work { background: rgba(59,130,246,0.15); color: var(--tag-work); }
+        .tag-personal { background: rgba(139,92,246,0.15); color: var(--tag-personal); }
+        .tag-health { background: rgba(16,185,129,0.15); color: var(--tag-health); }
+        .tag-urgent { background: rgba(239,68,68,0.15); color: var(--tag-urgent); }
+        .tag-other { background: rgba(245,158,11,0.15); color: var(--tag-other); }
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            background: var(--text); color: var(--bg); padding: 0.7rem 1.4rem;
+            border-radius: 25px; z-index: 999; animation: slideUp 0.3s ease;
+            font-weight: 500; font-size: 0.85rem; box-shadow: var(--shadow-lg);
+        }
+        @keyframes slideUp { from { opacity:0; transform: translateX(-50%) translateY(15px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
+        .due-info {
+            font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 15px;
+            font-weight: 500; white-space: nowrap; background: rgba(99,102,241,0.1); color: var(--accent);
+        }
+        .due-info.overdue { background: rgba(239,68,68,0.12); color: var(--danger); font-weight: 600; }
+        .alarm-indicator {
+            font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 15px;
+            font-weight: 500; white-space: nowrap; background: rgba(6,182,212,0.12); color: var(--cyan);
+        }
+        .inline-form { display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.4rem; }
+        .inline-form label { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0; }
+        .inline-form input[type="time"], .inline-form input[type="date"] { width: auto; flex: 1; margin-bottom: 0; }
+        .inline-form input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+        .inline-form select { padding: 0.4rem 0.6rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--glass); color: var(--text); font-family: inherit; font-size: 0.8rem; }
+        .modal { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal.open { display: flex; }
+        .modal-content {
+            background: var(--card); backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 1.8rem; border-radius: var(--radius); max-width: 520px; width: 92%;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border); max-height: 80vh; overflow-y: auto;
+        }
+        .modal-content h3 { margin-bottom: 1rem; font-weight: 600; }
+        .pomodoro-timer { font-size: 3rem; font-weight: 700; text-align: center; margin: 1rem 0; font-variant-numeric: tabular-nums; }
+        .pomodoro-controls { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 1rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; }
+        .stat-card { text-align: center; padding: 0.8rem; border-radius: var(--radius-sm); background: var(--glass); }
+        .stat-card .stat-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+        .stat-card .stat-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 0.2rem; }
+        .week-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 0.5rem; }
+        .week-day {
+            text-align: center; padding: 0.4rem; border-radius: var(--radius-sm);
+            font-size: 0.75rem; font-weight: 500; cursor: pointer; transition: all var(--transition);
+            background: var(--glass); min-height: 60px;
+        }
+        .week-day:hover { background: var(--accent-light); }
+        .week-day.today { background: var(--accent); color: white; font-weight: 700; }
+        .week-day .day-num { font-size: 0.85rem; font-weight: 700; }
+        .week-day .day-count { font-size: 0.6rem; opacity: 0.8; }
+        .payment-summary { display: flex; gap: 0.6rem; margin-bottom: 1rem; }
+        .payment-summary .summary-item {
+            flex: 1; text-align: center; padding: 0.6rem 0.4rem;
+            border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 600;
+        }
+        .summary-item.paid-summary { background: rgba(16,185,129,0.12); color: var(--success); }
+        .summary-item.pending-summary { background: rgba(245,158,11,0.12); color: var(--warning); }
+        .summary-item.overdue-summary { background: rgba(239,68,68,0.12); color: var(--danger); }
+        .payment-status {
+            font-size: 0.65rem; padding: 0.15rem 0.45rem; border-radius: 15px;
+            font-weight: 600; white-space: nowrap; letter-spacing: 0.02em;
+        }
+        .payment-status.paid-status { background: var(--success); color: white; }
+        .payment-status.pending-status { background: var(--warning); color: #0f172a; }
+        .payment-status.overdue-status { background: var(--danger); color: white; }
+        .habit-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.4rem; padding: 0.4rem 0; }
+        .habit-days { display: flex; gap: 4px; }
+        .habit-day {
+            width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 6px;
+            display: flex; align-items: center; justify-content: center; font-size: 0.65rem;
+            cursor: pointer; background: var(--glass); transition: all var(--transition); font-weight: 600;
+        }
+        .habit-day:hover { border-color: var(--accent); }
+        .habit-day.checked { background: var(--accent); color: white; border-color: var(--accent); }
+        .footer { text-align: center; margin-top: 2rem; font-size: 0.7rem; color: var(--text-secondary); opacity: 0.5; letter-spacing: 0.05em; display: flex; align-items: center; justify-content: center; gap: 0.3rem; }
+        .footer-whale { display: inline-block; width: 14px; height: 10px; background: linear-gradient(135deg, #3b82f6, #6366f1); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; }
+        .install-btn { background: linear-gradient(135deg, var(--accent), var(--cyan)); color: white; border: none; display: none; font-weight: 600; }
+        .type-buttons { display: flex; gap: 0.3rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+        .type-btn { padding: 0.4rem 0.7rem; border-radius: 18px; font-size: 0.78rem; border: 1px solid var(--border); font-weight: 500; }
+        .type-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .empty-state { text-align: center; padding: 2rem; color: var(--text-secondary); font-size: 0.9rem; opacity: 0.7; }
+        .empty-icon { font-size: 2.2rem; margin-bottom: 0.4rem; opacity: 0.5; }
+        .amount-tag { font-weight: 600; font-size: 0.85rem; color: var(--accent); }
+        .progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin-top: 0.5rem; overflow: hidden; }
+        .progress-bar .fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width 0.5s ease; }
+        @media (max-width: 600px) {
+            body { padding: 0.7rem; padding-bottom: 85px; }
+            header { padding: 0.7rem 1rem; }
+            nav button { font-size: 0.72rem; padding: 0.45rem 0.4rem; }
+            .card { padding: 1rem; }
+            .entry-row { flex-wrap: wrap; gap: 0.3rem; }
+            .payment-summary { flex-direction: column; }
+            .inline-form { flex-direction: column; align-items: stretch; }
+            .week-day { min-height: 45px; font-size: 0.65rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-left">
+        <div class="whale-logo"><div class="whale-body"></div><div class="whale-tail"></div><div class="whale-dot"></div></div>
+        <div class="header-title">
+            <h1>Bullet Journal</h1>
+            <span class="powered-by"><span class="ds-dot"></span> powered by DeepSeek</span>
+        </div>
+    </div>
+    <div class="header-actions">
+        <button id="helpBtn" class="btn-icon btn-help" title="Ayuda">?</button>
+        <button id="pomodoroBtn" class="btn-icon" title="Modo Enfoque">🍅</button>
+        <button id="statsBtn" class="btn-icon" title="Estadísticas">📊</button>
+        <button id="cloudUpBtn" title="Subir a la nube" class="btn-icon">☁️</button>
+        <button id="cloudDownBtn" title="Descargar de la nube" class="btn-icon">📥</button>
+        <button id="exportBtn" title="Exportar" class="btn-icon">↗</button>
+        <button id="importBtn" title="Importar" class="btn-icon">↙</button>
+        <button id="settingsBtn" title="Configurar" class="btn-icon">⚙</button>
+        <button id="themeToggle" title="Tema" class="btn-icon">◐</button>
+        <button id="installBtn" class="install-btn btn-primary">Instalar App</button>
+    </div>
+</header>
+
+<div id="helpModal" class="modal">
+    <div class="modal-content">
+        <h3>🐋 Guía de uso</h3>
+        <div class="help-section"><h4>📅 Diario / Semanal</h4><p>Registra tareas con <span class="highlight">etiquetas</span> (#trabajo, #personal). Ve la <span class="highlight">vista semanal</span> para planificar 7 días.</p></div>
+        <div class="help-section"><h4>🏷️ Etiquetas</h4><p>Filtra por color: <span style="color:#3b82f6;">#trabajo</span> <span style="color:#8b5cf6;">#personal</span> <span style="color:#10b981;">#salud</span> <span style="color:#ef4444;">#urgente</span></p></div>
+        <div class="help-section"><h4>🔄 Repeticiones</h4><p>Diario, semanal, mensual, cada X días, días hábiles, primer lunes del mes...</p></div>
+        <div class="help-section"><h4>🍅 Pomodoro</h4><p>Temporizador 25 min de enfoque + 5 min descanso.</p></div>
+        <div class="help-section"><h4>📊 Estadísticas</h4><p>Tareas completadas, racha de hábitos, pagos al día.</p></div>
+        <div class="help-section"><h4>☁️ Nube</h4><p>Se sincroniza <span class="highlight">automáticamente</span> cada 2 minutos si configuraste JSONBin.io.</p></div>
+        <button id="closeHelpBtn" class="btn-primary" style="width:100%;margin-top:0.5rem;">Entendido</button>
+    </div>
+</div>
+
+<div id="pomodoroModal" class="modal">
+    <div class="modal-content" style="text-align:center;">
+        <h3>🍅 Modo Enfoque</h3>
+        <div class="pomodoro-timer" id="pomodoroDisplay">25:00</div>
+        <p style="color:var(--text-secondary);" id="pomodoroStatus">Listo para empezar</p>
+        <div class="pomodoro-controls">
+            <button id="pomodoroStart" class="btn-primary">Iniciar</button>
+            <button id="pomodoroReset" class="btn">Reiniciar</button>
+        </div>
+        <button id="closePomodoroBtn" class="btn" style="width:100%;margin-top:0.5rem;">Cerrar</button>
+    </div>
+</div>
+
+<div id="statsModal" class="modal">
+    <div class="modal-content">
+        <h3>📊 Estadísticas</h3>
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="progress-bar"><div class="fill" id="progressFill" style="width:0%;"></div></div>
+        <p style="text-align:center;font-size:0.8rem;color:var(--text-secondary);margin-top:0.5rem;" id="progressLabel"></p>
+        <button id="closeStatsBtn" class="btn" style="width:100%;margin-top:0.5rem;">Cerrar</button>
+    </div>
+</div>
+
+<div id="settingsModal" class="modal">
+    <div class="modal-content">
+        <h3>Configurar nube</h3>
+        <p style="font-size:0.8rem;color:var(--text-secondary);margin-bottom:1rem;"><a href="https://jsonbin.io" target="_blank" style="color:var(--cyan);">JSONBin.io</a> (gratis) · Sincronización automática cada 2 min</p>
+        <label>API Key</label><input type="text" id="apiKeyInput" placeholder="Pega tu API Key">
+        <label>Bin ID</label><input type="text" id="binIdInput" placeholder="Pega el Bin ID">
+        <div style="display:flex; gap:0.5rem; margin-top:1rem;"><button id="saveSettingsBtn" class="btn-primary">Guardar</button><button id="closeSettingsBtn" class="btn">Cancelar</button></div>
+        <p id="cloudStatus" style="margin-top:0.6rem; font-size:0.75rem; color:var(--text-secondary);"></p>
+    </div>
+</div>
+
+<nav>
+    <button class="btn active" data-view="daily">Diario</button>
+    <button class="btn" data-view="weekly">Semanal</button>
+    <button class="btn" data-view="payments">Pagos</button>
+    <button class="btn" data-view="habits">Hábitos</button>
+    <button class="btn" data-view="collections">Colecciones</button>
+    <button class="btn" data-view="future">Futuro</button>
+</nav>
+
+<div id="dailyView" class="view active">
+    <div class="card">
+        <div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.8rem;">
+            <button id="prevDay" class="btn-icon">◂</button>
+            <input type="date" id="selectedDate" style="flex:1; margin-bottom:0; text-align:center; font-weight:600;">
+            <button id="todayBtn" class="btn" style="font-size:0.78rem;">Hoy</button>
+            <button id="nextDay" class="btn-icon">▸</button>
+        </div>
+        <textarea id="newEntry" placeholder="Escribe una tarea, evento o nota..." rows="2"></textarea>
+        <div class="type-buttons">
+            <button class="btn type-btn active" data-type="task">• Tarea</button>
+            <button class="btn type-btn" data-type="priority">★ Prioridad</button>
+            <button class="btn type-btn" data-type="event">○ Evento</button>
+            <button class="btn type-btn" data-type="note">— Nota</button>
+        </div>
+        <div class="inline-form">
+            <label>🏷️ Etiqueta</label>
+            <select id="tagSelect">
+                <option value="">Sin etiqueta</option>
+                <option value="work">#trabajo</option>
+                <option value="personal">#personal</option>
+                <option value="health">#salud</option>
+                <option value="urgent">#urgente</option>
+                <option value="other">#otro</option>
+            </select>
+        </div>
+        <div class="inline-form"><label>Vence</label><input type="date" id="dueDate"><input type="time" id="dueTime" style="width:110px;"></div>
+        <div class="inline-form"><label>Alarma</label><input type="checkbox" id="setAlarm" checked onchange="document.getElementById('alarmTime').style.opacity=this.checked?'1':'0.5'"><input type="time" id="alarmTime" style="width:110px;"></div>
+        <div class="inline-form">
+            <label>🔄 Repetir</label>
+            <select id="repeatType">
+                <option value="none">No repetir</option>
+                <option value="daily">Cada día</option>
+                <option value="weekdays">Días hábiles (L-V)</option>
+                <option value="weekly">Cada semana</option>
+                <option value="monthly">Cada mes</option>
+                <option value="custom">Cada X días</option>
+                <option value="weekday">Día de la semana</option>
+                <option value="nth_weekday">Día específico del mes</option>
+            </select>
+        </div>
+        <div id="repeatOptions" style="display:none;">
+            <div id="customDays" style="display:none;"><label>Cada</label><input type="number" id="repeatInterval" value="1" min="1" max="365" style="width:80px;"> días</div>
+            <div id="weekdayOpts" style="display:none;">
+                <label>Día:</label><select id="weekdaySelect"><option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option></select>
+                <select id="nthWeekSelect" style="display:none;"><option value="1">Primer</option><option value="2">Segundo</option><option value="3">Tercer</option><option value="4">Cuarto</option><option value="-1">Último</option></select>
+            </div>
+        </div>
+        <button id="addEntryBtn" class="btn-primary" style="width:100%;margin-top:0.4rem;">Agregar entrada</button>
+    </div>
+    <div class="card" id="dailyEntries"></div>
+</div>
+
+<div id="weeklyView" class="view">
+    <div class="card">
+        <div style="display:flex; gap:0.4rem; align-items:center; margin-bottom:0.8rem;">
+            <button id="prevWeek" class="btn-icon">◂</button>
+            <span id="weekLabel" style="flex:1;text-align:center;font-weight:600;"></span>
+            <button id="nextWeek" class="btn-icon">▸</button>
+        </div>
+        <div class="week-grid" id="weekGrid"></div>
+        <div id="weekDetail" class="card" style="margin-top:0.5rem;"></div>
+    </div>
+</div>
+
+<div id="paymentsView" class="view">
+    <div class="card">
+        <h3 style="margin-bottom:0.8rem;">Registrar pago</h3>
+        <input type="text" id="paymentName" placeholder="Nombre del pago">
+        <div style="display:flex; gap:0.6rem;"><input type="number" id="paymentAmount" placeholder="Monto $" step="0.01" style="flex:1;"><input type="date" id="paymentDueDate" style="flex:1;"></div>
+        <div class="inline-form"><label>Alarma</label><input type="checkbox" id="paymentAlarm" checked onchange="document.getElementById('paymentAlarmTime').style.opacity=this.checked?'1':'0.5'"><input type="time" id="paymentAlarmTime" style="width:110px;" value="09:00"></div>
+        <button id="addPaymentBtn" class="btn-primary" style="width:100%;">Agregar pago</button>
+    </div>
+    <div class="card">
+        <div style="display:flex; gap:0.4rem; align-items:center; margin-bottom:0.8rem;"><button id="prevPaymentMonth" class="btn-icon">◂</button><span id="paymentMonthLabel" style="flex:1;text-align:center;font-weight:600;"></span><button id="nextPaymentMonth" class="btn-icon">▸</button></div>
+        <div class="payment-summary" id="paymentSummary"></div>
+        <div id="paymentsList"></div>
+    </div>
+</div>
+
+<div id="habitsView" class="view">
+    <div class="card"><h3 style="margin-bottom:0.8rem;">Nuevo hábito</h3><input type="text" id="newHabit" placeholder="Ej: Leer 30 minutos..."><button id="addHabitBtn" class="btn-primary" style="width:100%;">Agregar hábito</button></div>
+    <div class="card" id="habitsList"></div>
+</div>
+
+<div id="collectionsView" class="view">
+    <div class="card"><h3 style="margin-bottom:0.8rem;">Nueva colección</h3><input type="text" id="newCollectionName" placeholder="Ej: Libros leídos..."><button id="addCollectionBtn" class="btn-primary" style="width:100%;">Crear colección</button></div>
+    <div id="collectionsList"></div>
+</div>
+
+<div id="futureView" class="view">
+    <div class="card"><h3 style="margin-bottom:0.8rem;">Planificar futuro</h3><input type="text" id="futureText" placeholder="Ej: Renovar pasaporte..."><input type="month" id="futureMonth"><button id="addFutureBtn" class="btn-primary" style="width:100%;">Agregar</button></div>
+    <div class="card" id="futureEntries"></div>
+</div>
+
+<div class="footer"><span class="footer-whale"></span> Bullet Journal · powered by DeepSeek</div>
+
+<script>
+const STORAGE = 'bujo_ds';
+let data = { daily: {}, habits: [], collections: [], future: [], payments: [] };
+let alarmTimers = {};
+let autoSyncInterval = null;
+
+function load() { const r = localStorage.getItem(STORAGE); if (r) data = JSON.parse(r); if (!data.payments) data.payments = []; }
+function save() { localStorage.setItem(STORAGE, JSON.stringify(data)); setupAllAlarms(); }
+load();
+
+function getCloudConfig() { return { apiKey: localStorage.getItem('cloud_apiKey') || '', binId: localStorage.getItem('cloud_binId') || '' }; }
+function saveCloudConfig(k, id) { localStorage.setItem('cloud_apiKey', k); localStorage.setItem('cloud_binId', id); startAutoSync(); }
+
+async function uploadToCloud(silent) {
+    const { apiKey, binId } = getCloudConfig();
+    if (!apiKey || !binId) return;
+    try {
+        const r = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, { method: 'PUT', headers: { 'X-Master-Key': apiKey, 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        if (r.ok && !silent) toast('☁️ Sincronizado');
+    } catch (e) { if (!silent) console.log('Sync error'); }
+}
+async function downloadFromCloud() {
+    const { apiKey, binId } = getCloudConfig();
+    if (!apiKey || !binId) { alert('Configura la nube en ⚙'); return; }
+    if (!confirm('¿Reemplazar datos locales?')) return;
+    try {
+        const r = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, { headers: { 'X-Master-Key': apiKey } });
+        if (r.ok) { data = (await r.json()).record; save(); toast('☁️ Restaurado'); location.reload(); }
+    } catch (e) { alert('Error de conexión'); }
+}
+
+function startAutoSync() {
+    if (autoSyncInterval) clearInterval(autoSyncInterval);
+    const { apiKey, binId } = getCloudConfig();
+    if (apiKey && binId) {
+        autoSyncInterval = setInterval(() => uploadToCloud(true), 120000); // Cada 2 minutos
+    }
+}
+startAutoSync();
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+    const c = getCloudConfig();
+    document.getElementById('apiKeyInput').value = c.apiKey;
+    document.getElementById('binIdInput').value = c.binId;
+    document.getElementById('settingsModal').classList.add('open');
+});
+document.getElementById('closeSettingsBtn').addEventListener('click', () => document.getElementById('settingsModal').classList.remove('open'));
+document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+    const k = document.getElementById('apiKeyInput').value.trim(), id = document.getElementById('binIdInput').value.trim();
+    if (!k || !id) { alert('Ambos campos requeridos'); return; }
+    saveCloudConfig(k, id); document.getElementById('settingsModal').classList.remove('open'); toast('⚙ Configuración guardada');
+});
+document.getElementById('cloudUpBtn').addEventListener('click', () => uploadToCloud(false));
+document.getElementById('cloudDownBtn').addEventListener('click', downloadFromCloud);
+
+document.getElementById('helpBtn').addEventListener('click', () => document.getElementById('helpModal').classList.add('open'));
+document.getElementById('closeHelpBtn').addEventListener('click', () => document.getElementById('helpModal').classList.remove('open'));
+
+// Pomodoro
+let pomodoroTime = 25 * 60, pomodoroInterval = null, pomodoroRunning = false;
+document.getElementById('pomodoroBtn').addEventListener('click', () => document.getElementById('pomodoroModal').classList.add('open'));
+document.getElementById('closePomodoroBtn').addEventListener('click', () => { clearInterval(pomodoroInterval); pomodoroRunning = false; document.getElementById('pomodoroModal').classList.remove('open'); });
+document.getElementById('pomodoroStart').addEventListener('click', () => {
+    if (pomodoroRunning) { clearInterval(pomodoroInterval); pomodoroRunning = false; document.getElementById('pomodoroStart').textContent = 'Iniciar'; return; }
+    pomodoroRunning = true;
+    document.getElementById('pomodoroStart').textContent = 'Pausar';
+    document.getElementById('pomodoroStatus').textContent = 'Enfocado...';
+    pomodoroInterval = setInterval(() => {
+        pomodoroTime--;
+        const m = Math.floor(pomodoroTime / 60), s = pomodoroTime % 60;
+        document.getElementById('pomodoroDisplay').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        if (pomodoroTime <= 0) {
+            clearInterval(pomodoroInterval); pomodoroRunning = false;
+            document.getElementById('pomodoroStatus').textContent = '¡Descanso de 5 min!';
+            document.getElementById('pomodoroStart').textContent = 'Iniciar';
+            pomodoroTime = 25 * 60;
+            document.getElementById('pomodoroDisplay').textContent = '25:00';
+            notify('🍅 ¡Pomodoro completado! Toma un descanso.');
+            setTimeout(() => { document.getElementById('pomodoroStatus').textContent = 'Listo para empezar'; }, 5000);
+        }
+    }, 1000);
+});
+document.getElementById('pomodoroReset').addEventListener('click', () => {
+    clearInterval(pomodoroInterval); pomodoroRunning = false;
+    pomodoroTime = 25 * 60;
+    document.getElementById('pomodoroDisplay').textContent = '25:00';
+    document.getElementById('pomodoroStart').textContent = 'Iniciar';
+    document.getElementById('pomodoroStatus').textContent = 'Listo para empezar';
+});
+
+// Estadísticas
+document.getElementById('statsBtn').addEventListener('click', () => {
+    document.getElementById('statsModal').classList.add('open');
+    const today = new Date().toISOString().split('T')[0];
+    const todayEntries = data.daily[today] || [];
+    const doneToday = todayEntries.filter(e => e.done).length;
+    const totalToday = todayEntries.length;
+    const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    let weekDone = 0, weekTotal = 0;
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(weekStart); d.setDate(d.getDate() + i);
+        const ds = d.toISOString().split('T')[0];
+        const entries = data.daily[ds] || [];
+        weekDone += entries.filter(e => e.done).length;
+        weekTotal += entries.length;
+    }
+    const totalPayments = data.payments.length;
+    const paidPayments = data.payments.filter(p => p.paid).length;
+    const habitCount = data.habits.length;
+    const pct = totalToday > 0 ? Math.round((doneToday / totalToday) * 100) : 0;
+    document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card"><div class="stat-value">${doneToday}/${totalToday}</div><div class="stat-label">Hoy</div></div>
+        <div class="stat-card"><div class="stat-value">${weekDone}</div><div class="stat-label">Semana</div></div>
+        <div class="stat-card"><div class="stat-value">${paidPayments}/${totalPayments}</div><div class="stat-label">Pagos</div></div>
+        <div class="stat-card"><div class="stat-value">${habitCount}</div><div class="stat-label">Hábitos</div></div>
+    `;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '% completado hoy';
+});
+document.getElementById('closeStatsBtn').addEventListener('click', () => document.getElementById('statsModal').classList.remove('open'));
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('bujo_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+});
+if (localStorage.getItem('bujo_theme') === 'dark') document.body.classList.add('dark');
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+    const b = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b);
+    a.download = `bujo-${new Date().toISOString().slice(0,10)}.json`; a.click(); toast('↗ Exportado');
+});
+document.getElementById('importBtn').addEventListener('click', () => {
+    const i = document.createElement('input'); i.type = 'file'; i.accept = '.json';
+    i.onchange = (e) => {
+        const r = new FileReader();
+        r.onload = (ev) => { try { data = JSON.parse(ev.target.result); save(); toast('↙ Restaurado'); location.reload(); } catch (ex) { alert('Archivo inválido'); } };
+        r.readAsText(e.target.files[0]);
+    }; i.click();
+});
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display = 'inline-flex'; });
+document.getElementById('installBtn').addEventListener('click', () => { if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt = null; } });
+
+function setupAllAlarms() {
+    Object.values(alarmTimers).forEach(t => clearTimeout(t));
+    alarmTimers = {};
+    if (!('Notification' in window)) return;
+    const now = Date.now();
+    for (const d in data.daily) data.daily[d].forEach(e => {
+        if (e.alarmDateTime && !e.done && !e.alarmFired) {
+            const t = new Date(e.alarmDateTime).getTime() - now;
+            if (t > 0) alarmTimers[e.id] = setTimeout(() => triggerAlarm(e), t);
+            else triggerAlarm(e);
+        }
+    });
+    data.payments.forEach(p => {
+        if (p.alarmDateTime && !p.paid && !p.alarmFired) {
+            const t = new Date(p.alarmDateTime).getTime() - now;
+            if (t > 0) alarmTimers['p_'+p.id] = setTimeout(() => triggerPayAlarm(p), t);
+            else triggerPayAlarm(p);
+        }
+    });
+}
+function triggerAlarm(e) { if (e.alarmFired) return; e.alarmFired = true; save(); notify('⏰ ' + e.text); if (document.getElementById('dailyView').classList.contains('active')) renderDaily(); }
+function triggerPayAlarm(p) { if (p.alarmFired) return; p.alarmFired = true; save(); notify('💳 ' + p.name); }
+function notify(msg) {
+    if ('Notification' in window && Notification.permission === 'granted') new Notification('Recordatorio', { body: msg, tag: 'bujo' });
+    playSound(); toast('🔔 ' + msg.substring(0, 35));
+}
+function playSound() {
+    try { const c = new (window.AudioContext || window.webkitAudioContext)(); [523,659,784].forEach((f,i) => { const o=c.createOscillator(),g=c.createGain(); o.type='sine'; o.frequency.value=f; g.gain.value=0.2; g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+1); o.connect(g); g.connect(c.destination); o.start(c.currentTime+i*0.15); o.stop(c.currentTime+i*0.15+0.6); }); } catch(e){}
+}
+(async () => { if ('Notification' in window && Notification.permission === 'default') await Notification.requestPermission(); })();
+
+document.querySelectorAll('nav button').forEach(b => {
+    b.addEventListener('click', () => {
+        document.querySelectorAll('nav button').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById(b.dataset.view + 'View').classList.add('active');
+        if (b.dataset.view === 'daily') renderDaily();
+        if (b.dataset.view === 'weekly') renderWeek();
+        if (b.dataset.view === 'payments') renderPayments();
+        if (b.dataset.view === 'habits') renderHabits();
+        if (b.dataset.view === 'collections') renderCollections();
+        if (b.dataset.view === 'future') renderFuture();
+    });
+});
+
+const selDate = document.getElementById('selectedDate');
+selDate.value = new Date().toISOString().split('T')[0];
+let typeSel = 'task';
+document.querySelectorAll('.type-btn').forEach(b => b.addEventListener('click', () => { document.querySelectorAll('.type-btn').forEach(x => x.classList.remove('active')); b.classList.add('active'); typeSel = b.dataset.type; }));
+
+document.getElementById('repeatType').addEventListener('change', function() {
+    const ro = document.getElementById('repeatOptions');
+    const cd = document.getElementById('customDays');
+    const wo = document.getElementById('weekdayOpts');
+    const nw = document.getElementById('nthWeekSelect');
+    if (this.value === 'none' || this.value === 'daily' || this.value === 'weekdays' || this.value === 'weekly' || this.value === 'monthly') {
+        ro.style.display = 'none';
+    } else {
+        ro.style.display = 'block';
+    }
+    cd.style.display = this.value === 'custom' ? 'block' : 'none';
+    wo.style.display = (this.value === 'weekday' || this.value === 'nth_weekday') ? 'block' : 'none';
+    nw.style.display = this.value === 'nth_weekday' ? 'inline-block' : 'none';
+});
+
+document.getElementById('addEntryBtn').addEventListener('click', () => {
+    const text = document.getElementById('newEntry').value.trim(); if (!text) return;
+    const date = selDate.value, dueDate = document.getElementById('dueDate').value, dueTime = document.getElementById('dueTime').value;
+    const setAlarm = document.getElementById('setAlarm').checked, alarmTime = document.getElementById('alarmTime').value;
+    const tag = document.getElementById('tagSelect').value;
+    const repeatType = document.getElementById('repeatType').value;
+    let dueDT = null; if (dueDate) dueDT = dueTime ? dueDate+'T'+dueTime : dueDate+'T23:59';
+    let alarmDT = null;
+    if (setAlarm) { if (alarmTime) alarmDT = (dueDate||date)+'T'+alarmTime; else if (dueDT) alarmDT = dueDT; }
+    if (!data.daily[date]) data.daily[date] = [];
+    const entry = { id: Date.now(), text, type: typeSel, done: false, date, dueDateTime: dueDT, alarmDateTime: alarmDT, alarm: setAlarm&&!!alarmDT, alarmFired: false, tag: tag || null, recurring: repeatType };
+    if (repeatType === 'custom') entry.recurringInterval = parseInt(document.getElementById('repeatInterval').value) || 1;
+    if (repeatType === 'weekday' || repeatType === 'nth_weekday') {
+        entry.recurringWeekday = parseInt(document.getElementById('weekdaySelect').value);
+        if (repeatType === 'nth_weekday') entry.recurringNthWeek = parseInt(document.getElementById('nthWeekSelect').value);
+    }
+    data.daily[date].push(entry);
+    save();
+    document.getElementById('newEntry').value = ''; document.getElementById('dueDate').value = ''; document.getElementById('dueTime').value = ''; document.getElementById('alarmTime').value = '';
+    document.getElementById('tagSelect').value = ''; document.getElementById('repeatType').value = 'none'; document.getElementById('repeatOptions').style.display = 'none';
+    renderDaily(); toast('Entrada agregada');
+    uploadToCloud(true);
+});
+selDate.addEventListener('change', renderDaily);
+document.getElementById('prevDay').addEventListener('click', () => chDay(-1));
+document.getElementById('nextDay').addEventListener('click', () => chDay(1));
+document.getElementById('todayBtn').addEventListener('click', () => { selDate.value = new Date().toISOString().split('T')[0]; renderDaily(); });
+function chDay(o) { const d = new Date(selDate.value+'T00:00:00'); d.setDate(d.getDate()+o); selDate.value = d.toISOString().split('T')[0]; renderDaily(); }
+
+function isO(dt,d) { return dt&&!d&&new Date(dt).getTime()<Date.now(); }
+function isT(dt) { return dt&&new Date(dt).toDateString()===new Date().toDateString(); }
+function fmt(dt) { if(!dt)return''; const d=new Date(dt),df=d.getTime()-Date.now(); if(df<0)return'Vencido'; if(Math.ceil(df/864e5)===0)return'Hoy '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); return d.toLocaleDateString()+' '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+function fmtA(at) { return at?'⏰ '+new Date(at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):''; }
+function tagClass(t) { return t ? 'tag-' + t : ''; }
+
+function renderDaily() {
+    const date = selDate.value, entries = (data.daily[date]||[]).sort((a,b) => (a.done-b.done)||(a.dueDateTime&&b.dueDateTime?new Date(a.dueDateTime)-new Date(b.dueDateTime):a.dueDateTime?-1:1));
+    const c = document.getElementById('dailyEntries');
+    if (!entries.length) { c.innerHTML = '<div class="empty-state"><div class="empty-icon">🐋</div>Sin entradas</div>'; return; }
+    c.innerHTML = entries.map(e => {
+        let cls = ''; if (!e.done && e.dueDateTime && isO(e.dueDateTime,e.done)) cls='overdue'; else if (!e.done && e.dueDateTime && isT(e.dueDateTime)) cls='due-today';
+        let bul='•',bc=''; if(e.done){bul='✓';bc='done';} else if(e.type==='priority'){bul='★';bc='priority';} else if(e.type==='event'){bul='○';bc='event';}
+        return `<div class="entry-row ${cls}"><div class="bullet-icon ${bc} ${e.done?'done':''}" data-id="${e.id}">${bul}</div><span class="entry-text ${e.done?'done':''}">${e.text}</span>${e.tag?`<span class="tag tag-${e.tag}">#${e.tag}</span>`:''}${e.dueDateTime?`<span class="due-info ${isO(e.dueDateTime,e.done)?'overdue':''}">${fmt(e.dueDateTime)}</span>`:''}${e.alarmDateTime?`<span class="alarm-indicator">${fmtA(e.alarmDateTime)}</span>`:''}<button class="delete-btn" data-id="${e.id}">✕</button></div>`;
+    }).join('');
+    c.querySelectorAll('.bullet-icon').forEach(b => { b.addEventListener('click', () => { const e = data.daily[date].find(x => x.id===Number(b.dataset.id)); if(e) { e.done=!e.done; if(e.done)e.alarm=false; save(); renderDaily(); } }); });
+    c.querySelectorAll('.delete-btn').forEach(b => { b.addEventListener('click', () => { data.daily[date] = data.daily[date].filter(x => x.id!==Number(b.dataset.id)); save(); renderDaily(); }); });
+}
+
+// Vista semanal
+let weekOffset = 0;
+function renderWeek() {
+    const now = new Date(); now.setDate(now.getDate() + weekOffset * 7);
+    const start = new Date(now); start.setDate(start.getDate() - start.getDay());
+    const end = new Date(start); end.setDate(end.getDate() + 6);
+    document.getElementById('weekLabel').textContent = `${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
+    const today = new Date().toISOString().split('T')[0];
+    const grid = document.getElementById('weekGrid');
+    grid.innerHTML = '';
+    const dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+    for (let i = 0; i < 7; i++) {
+        const d = new Date(start); d.setDate(d.getDate() + i);
+        const ds = d.toISOString().split('T')[0];
+        const entries = data.daily[ds] || [];
+        const done = entries.filter(e => e.done).length;
+        const total = entries.length;
+        grid.innerHTML += `<div class="week-day${ds===today?' today':''}" data-date="${ds}">
+            <div style="font-size:0.6rem;opacity:0.7;">${dayNames[i]}</div>
+            <div class="day-num">${d.getDate()}</div>
+            <div class="day-count">${done}/${total}</div>
+        </div>`;
+    }
+    grid.querySelectorAll('.week-day').forEach(day => {
+        day.addEventListener('click', () => {
+            selDate.value = day.dataset.date;
+            document.querySelector('nav button[data-view="daily"]').click();
+        });
+    });
+    const todayEntries = data.daily[today] || [];
+    document.getElementById('weekDetail').innerHTML = `<h4 style="margin-bottom:0.5rem;">📅 Hoy</h4>` + (todayEntries.length ? todayEntries.map(e => `<div class="entry-row"><span>${e.done?'✓':'•'}</span><span class="entry-text ${e.done?'done':''}">${e.text}</span>${e.tag?`<span class="tag tag-${e.tag}">#${e.tag}</span>`:''}</div>`).join('') : '<p style="opacity:0.6;">Sin entradas hoy</p>');
+}
+document.getElementById('prevWeek').addEventListener('click', () => { weekOffset--; renderWeek(); });
+document.getElementById('nextWeek').addEventListener('click', () => { weekOffset++; renderWeek(); });
+
+let pm = new Date().getMonth(), py = new Date().getFullYear();
+document.getElementById('addPaymentBtn').addEventListener('click', () => {
+    const n = document.getElementById('paymentName').value.trim(), a = parseFloat(document.getElementById('paymentAmount').value)||0;
+    const dd = document.getElementById('paymentDueDate').value, sa = document.getElementById('paymentAlarm').checked, at = document.getElementById('paymentAlarmTime').value;
+    if (!n || !dd) return;
+    let adt = null; if (sa && at) adt = dd+'T'+at; else if (sa) adt = dd+'T09:00';
+    data.payments.push({ id: Date.now(), name: n, amount: a, dueDate: dd, paid: false, alarmDateTime: adt, alarm: sa&&!!adt, alarmFired: false });
+    save(); document.getElementById('paymentName').value = ''; document.getElementById('paymentAmount').value = ''; renderPayments(); toast('Pago agregado');
+    uploadToCloud(true);
+});
+function renderPayments() {
+    document.getElementById('paymentMonthLabel').textContent = new Date(py,pm).toLocaleDateString('es',{month:'long',year:'numeric'});
+    const s = `${py}-${String(pm+1).padStart(2,'0')}-01`, e = `${py}-${String(pm+1).padStart(2,'0')}-${new Date(py,pm+1,0).getDate()}`;
+    const ps = data.payments.filter(p => p.dueDate >= s && p.dueDate <= e), today = new Date().toISOString().split('T')[0];
+    let paid=0, pending=0, overdue=0;
+    ps.forEach(p => { if(p.paid) paid+=p.amount; else if(p.dueDate<today) overdue+=p.amount; else pending+=p.amount; });
+    document.getElementById('paymentSummary').innerHTML = `<div class="summary-item paid-summary">Pagado<br>$${paid.toFixed(2)}</div><div class="summary-item pending-summary">Pendiente<br>$${pending.toFixed(2)}</div><div class="summary-item overdue-summary">Vencido<br>$${overdue.toFixed(2)}</div>`;
+    const c = document.getElementById('paymentsList');
+    if (!ps.length) { c.innerHTML = '<div class="empty-state"><div class="empty-icon">💳</div>Sin pagos</div>'; return; }
+    c.innerHTML = ps.sort((a,b) => a.paid-b.paid||a.dueDate.localeCompare(b.dueDate)).map(p => {
+        let cls = p.paid?'paid':p.dueDate<today?'overdue':p.dueDate===today?'due-today':'';
+        let st = p.paid?'Pagado':p.dueDate<today?'Vencido':'Pendiente', sc = p.paid?'paid-status':p.dueDate<today?'overdue-status':'pending-status';
+        return `<div class="entry-row ${cls}"><div class="bullet-icon ${p.paid?'done':''}" data-id="${p.id}">${p.paid?'✓':'💳'}</div><span class="entry-text ${p.paid?'done':''}">${p.name}</span><span class="amount-tag">$${p.amount.toFixed(2)}</span><span class="payment-status ${sc}">${st}</span><small>${p.dueDate}</small>${p.alarmDateTime?`<span class="alarm-indicator">${fmtA(p.alarmDateTime)}</span>`:''}<button class="delete-btn" data-id="${p.id}">✕</button></div>`;
+    }).join('');
+    c.querySelectorAll('.bullet-icon').forEach(b => { b.addEventListener('click', () => { const p = data.payments.find(x => x.id===Number(b.dataset.id)); if(p) { p.paid=!p.paid; if(p.paid)p.alarm=false; save(); renderPayments(); } }); });
+    c.querySelectorAll('.delete-btn').forEach(b => { b.addEventListener('click', () => { data.payments = data.payments.filter(x => x.id!==Number(b.dataset.id)); save(); renderPayments(); }); });
+}
+document.getElementById('prevPaymentMonth').addEventListener('click', () => { pm--; if(pm<0){pm=11;py--;} renderPayments(); });
+document.getElementById('nextPaymentMonth').addEventListener('click', () => { pm++; if(pm>11){pm=0;py++;} renderPayments(); });
+
+document.getElementById('addHabitBtn').addEventListener('click', () => {
+    const n = document.getElementById('newHabit').value.trim(); if (!n) return;
+    data.habits.push({ id: Date.now(), name: n, tracker: {} }); save(); document.getElementById('newHabit').value = ''; renderHabits();
+});
+function renderHabits() {
+    const c = document.getElementById('habitsList');
+    if (!data.habits.length) { c.innerHTML = '<div class="empty-state"><div class="empty-icon">✅</div>Sin hábitos</div>'; return; }
+    const l7 = []; for (let i=6;i>=0;i--) { const d=new Date(); d.setDate(d.getDate()-i); l7.push(d.toISOString().split('T')[0]); }
+    c.innerHTML = data.habits.map(h => `<div class="habit-row"><span style="flex:1;font-weight:500;">${h.name}</span><div class="habit-days">${l7.map(d => `<div class="habit-day ${h.tracker[d]?'checked':''}" data-habit="${h.id}" data-date="${d}">${h.tracker[d]?'✓':''}</div>`).join('')}</div><button class="delete-btn" data-habit="${h.id}">✕</button></div>`).join('');
+    c.querySelectorAll('.habit-day').forEach(d => { d.addEventListener('click', () => { const h = data.habits.find(x => x.id===Number(d.dataset.habit)); if (h) { h.tracker[d.dataset.date] = !h.tracker[d.dataset.date]; save(); renderHabits(); } }); });
+    c.querySelectorAll('.delete-btn').forEach(b => { b.addEventListener('click', () => { data.habits = data.habits.filter(x => x.id!==Number(b.dataset.habit)); save(); renderHabits(); }); });
+}
+
+document.getElementById('addCollectionBtn').addEventListener('click', () => {
+    const n = document.getElementById('newCollectionName').value.trim(); if (!n) return;
+    data.collections.push({ id: Date.now(), name: n, items: [] }); save(); document.getElementById('newCollectionName').value = ''; renderCollections();
+});
+function renderCollections() {
+    const c = document.getElementById('collectionsList');
+    if (!data.collections.length) { c.innerHTML = '<div class="card"><div class="empty-state"><div class="empty-icon">📚</div>Sin colecciones</div></div>'; return; }
+    c.innerHTML = data.collections.map(col => `<div class="card"><h3 style="margin-bottom:0.6rem;">${col.name} <button class="delete-btn" data-id="${col.id}" style="float:right;">✕</button></h3><div style="display:flex;gap:0.4rem;margin-bottom:0.4rem;"><input type="text" class="ci" data-id="${col.id}" placeholder="Nuevo elemento" style="flex:1;"><button class="aci btn-primary" data-id="${col.id}" style="padding:0.4rem 0.7rem;">+</button></div><ul style="margin-top:0.4rem;padding-left:1.2rem;">${col.items.map(i => `<li style="margin-bottom:0.2rem;">${i}</li>`).join('')}</ul></div>`).join('');
+    c.querySelectorAll('.aci').forEach(b => { b.addEventListener('click', () => { const col = data.collections.find(x => x.id===Number(b.dataset.id)); const i = document.querySelector(`.ci[data-id="${b.dataset.id}"]`); if (col && i.value.trim()) { col.items.push(i.value.trim()); save(); renderCollections(); } }); });
+    c.querySelectorAll('.delete-btn').forEach(b => { b.addEventListener('click', () => { data.collections = data.collections.filter(x => x.id!==Number(b.dataset.id)); save(); renderCollections(); }); });
+}
+
+document.getElementById('addFutureBtn').addEventListener('click', () => {
+    const t = document.getElementById('futureText').value.trim(), m = document.getElementById('futureMonth').value;
+    if (!t || !m) return;
+    data.future.push({ id: Date.now(), text: t, month: m, done: false }); save(); document.getElementById('futureText').value = ''; renderFuture();
+});
+function renderFuture() {
+    const c = document.getElementById('futureEntries');
+    c.innerHTML = data.future.length ? data.future.map(f => `<div class="entry-row"><span>🔮</span><span class="entry-text">${f.text}</span><small>${f.month}</small><button class="delete-btn" data-id="${f.id}">✕</button></div>`).join('') : '<div class="empty-state"><div class="empty-icon">🔮</div>Sin entradas</div>';
+    c.querySelectorAll('.delete-btn').forEach(b => { b.addEventListener('click', () => { data.future = data.future.filter(f => f.id!==Number(b.dataset.id)); save(); renderFuture(); }); });
+}
+
+function toast(m) { const t = document.createElement('div'); t.className = 'toast'; t.textContent = m; document.body.appendChild(t); setTimeout(() => t.remove(), 2200); }
+
+if ('serviceWorker' in navigator) {
+    const sw = new Blob([`const C='bujo-ds';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll(['/'])).catch(()=>{}))});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)).catch(()=>new Response('')));});`], {type:'application/javascript'});
+    navigator.serviceWorker.register(URL.createObjectURL(sw)).catch(()=>{});
+}
+const manifest = { name:'Bullet Journal · DeepSeek', short_name:'Bujo', start_url:'.', display:'standalone', background_color:'#0b1120', theme_color:'#6366f1', icons:[{src:'data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192"><rect width="192" height="192" rx="40" fill="#3b82f6"/><ellipse cx="96" cy="90" rx="45" ry="28" fill="white"/><polygon points="145,90 160,78 160,102" fill="white"/><circle cx="108" cy="84" r="3" fill="#3b82f6"/></svg>'),sizes:'192x192',type:'image/svg+xml'}] };
+const link = document.createElement('link'); link.rel = 'manifest'; link.href = URL.createObjectURL(new Blob([JSON.stringify(manifest)], {type:'application/json'})); document.head.appendChild(link);
+
+renderDaily(); renderWeek(); renderPayments(); renderHabits(); renderCollections(); renderFuture();
+setupAllAlarms(); setInterval(() => setupAllAlarms(), 60000);
+</script>
+</body>
+</html>
